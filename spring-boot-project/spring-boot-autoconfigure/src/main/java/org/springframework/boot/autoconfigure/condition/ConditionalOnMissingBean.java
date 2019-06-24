@@ -57,7 +57,7 @@ import org.springframework.context.annotation.Conditional;
  * @author Phillip Webb
  * @author Andy Wilkinson
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })  //可以注解再方法上和再类上
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnBeanCondition.class)

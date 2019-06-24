@@ -36,11 +36,12 @@ public class LiquibaseServiceLocatorApplicationListener implements ApplicationLi
 
 	private static final Log logger = LogFactory.getLog(LiquibaseServiceLocatorApplicationListener.class);
 
+	//监听了ApplicationStartingEvents事件，那么会检查classpath中是否有liquibase.servicelocator.ServiceLocator并做相应操作；
 	@Override
 	public void onApplicationEvent(ApplicationStartingEvent event) {
 		if (ClassUtils.isPresent("liquibase.servicelocator.CustomResolverServiceLocator",
 				event.getSpringApplication().getClassLoader())) {
-			new LiquibasePresent().replaceServiceLocator();
+			new LiquibasePresent().replaceServiceLocator(); //如果存在CustomResolverServiceLocator 则将其替换成一个适用于springboot的版本
 		}
 	}
 

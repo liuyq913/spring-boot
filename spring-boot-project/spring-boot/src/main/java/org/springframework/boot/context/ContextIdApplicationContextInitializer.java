@@ -16,14 +16,14 @@
 
 package org.springframework.boot.context;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * {@link ApplicationContextInitializer} that sets the Spring
@@ -48,6 +48,10 @@ public class ContextIdApplicationContextInitializer
 		return this.order;
 	}
 
+	/**
+	 * 为Application设置id
+	 * @param applicationContext
+	 */
 	@Override
 	public void initialize(ConfigurableApplicationContext applicationContext) {
 		ContextId contextId = getContextId(applicationContext);

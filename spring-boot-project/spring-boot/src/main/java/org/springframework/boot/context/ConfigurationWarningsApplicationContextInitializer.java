@@ -16,16 +16,8 @@
 
 package org.springframework.boot.context;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -42,18 +34,22 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.*;
+
 /**
  * {@link ApplicationContextInitializer} to report warnings for common misconfiguration
  * mistakes.
  *
  * @author Phillip Webb
  * @since 1.2.0
+ *
  */
 public class ConfigurationWarningsApplicationContextInitializer
 		implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
 	private static final Log logger = LogFactory.getLog(ConfigurationWarningsApplicationContextInitializer.class);
 
+	//为ApplicationContext添加一个能够检查配置，并且在有常见错误配置打印警告信息的BeanFatoryPostProcessor
 	@Override
 	public void initialize(ConfigurableApplicationContext context) {
 		context.addBeanFactoryPostProcessor(new ConfigurationWarningsPostProcessor(getChecks()));

@@ -16,9 +16,6 @@
 
 package org.springframework.boot.context.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.ApplicationContextInitializer;
@@ -30,6 +27,9 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link ApplicationContextInitializer} that delegates to other initializers that are
@@ -48,7 +48,7 @@ public class DelegatingApplicationContextInitializer
 	private int order = 0;
 
 	@Override
-	public void initialize(ConfigurableApplicationContext context) {
+	public void initialize(ConfigurableApplicationContext context) {  //从ApplicationContext的环境配置中，读取initializer信息并运用
 		ConfigurableEnvironment environment = context.getEnvironment();
 		List<Class<?>> initializerClasses = getInitializerClasses(environment);
 		if (!initializerClasses.isEmpty()) {

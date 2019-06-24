@@ -40,6 +40,7 @@ import org.springframework.util.ErrorHandler;
  * @author Phillip Webb
  * @author Stephane Nicoll
  * @author Andy Wilkinson
+ * 在SpringApplication对象的run方法执行到不同的阶段的时候，发布相应的事件给相应的事件监听器
  */
 public class EventPublishingRunListener implements SpringApplicationRunListener, Ordered {
 
@@ -64,7 +65,7 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 	}
 
 	@Override
-	public void starting() {
+	public void starting() { //发布了starting事件
 		this.initialMulticaster.multicastEvent(new ApplicationStartingEvent(this.application, this.args));
 	}
 

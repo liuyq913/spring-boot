@@ -48,7 +48,7 @@ import org.springframework.util.MultiValueMap;
  * @see ConditionalOnClass
  * @see ConditionalOnMissingClass
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE) //定义注解顺序
 class OnClassCondition extends SpringBootCondition
 		implements AutoConfigurationImportFilter, BeanFactoryAware, BeanClassLoaderAware {
 
