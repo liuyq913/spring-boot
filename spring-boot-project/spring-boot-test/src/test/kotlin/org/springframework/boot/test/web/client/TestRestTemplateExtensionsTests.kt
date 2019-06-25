@@ -17,7 +17,6 @@
 package org.springframework.boot.test.web.client
 
 import com.nhaarman.mockito_kotlin.mock
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Answers
@@ -29,11 +28,7 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.RequestEntity
-import org.springframework.util.ReflectionUtils
-import org.springframework.web.client.RestOperations
 import java.net.URI
-import kotlin.reflect.full.createType
-import kotlin.reflect.jvm.kotlinFunction
 
 /**
  * Mock object based tests for [TestRestTemplate] Kotlin extensions
@@ -246,6 +241,7 @@ class TestRestTemplateExtensionsTests {
 		verify(template, times(1)).exchange(url, method, null,
 				object : ParameterizedTypeReference<List<Foo>>() {})
 	}
+/*
 
 	@Test
 	fun `RestOperations are available`() {
@@ -265,6 +261,7 @@ class TestRestTemplateExtensionsTests {
 			}
 		}
 	}
+*/
 
 	class Foo
 

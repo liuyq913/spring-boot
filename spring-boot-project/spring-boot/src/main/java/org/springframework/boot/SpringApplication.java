@@ -267,7 +267,7 @@ public class SpringApplication {
 		ConfigurableApplicationContext context = null;
 		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
 		configureHeadlessProperty();
-		SpringApplicationRunListeners listeners = getRunListeners(args);
+		SpringApplicationRunListeners listeners = getRunListeners(args);  //获取spring.factories的SpringApplicationRunListener的监听器
 		listeners.starting(); //发布starting事件
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
@@ -275,7 +275,7 @@ public class SpringApplication {
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment); //打印Banner
-			context = createApplicationContext(); //创建容器
+			context = createApplicationContext(); //创建容器  默认AnnotationConfigServletWebServerApplicationContext
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
@@ -350,7 +350,7 @@ public class SpringApplication {
 		Set<Object> sources = getAllSources();
 		Assert.notEmpty(sources, "Sources must not be empty");
 		load(context, sources.toArray(new Object[0]));
-		listeners.contextLoaded(context);
+		listeners.contextLoaded(context); //给监听器set context 同时给context设置监听器， 及发布prepareContext事件
 	}
 
 	private void refreshContext(ConfigurableApplicationContext context) {
@@ -529,7 +529,7 @@ public class SpringApplication {
 			try {
 				switch (this.webApplicationType) {
 				case SERVLET:
-					contextClass = Class.forName(DEFAULT_SERVLET_WEB_CONTEXT_CLASS);
+					contextClass = Class.forName(DEFAULT_SERVLET_WEB_CONTEXT_CLASS); //默认是这个
 					break;
 				case REACTIVE:
 					contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);

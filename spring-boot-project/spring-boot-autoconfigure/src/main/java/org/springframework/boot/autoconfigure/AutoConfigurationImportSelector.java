@@ -16,26 +16,10 @@
 
 package org.springframework.boot.autoconfigure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.Aware;
-import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
@@ -53,6 +37,10 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * {@link DeferredImportSelector} to handle {@link EnableAutoConfiguration
@@ -88,16 +76,19 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 		if (!isEnabled(annotationMetadata)) {
 			return NO_IMPORTS;
 		}
+		//1.从META-INF/spring-autoconfigure-metadata.properties文件中载入483条配置属性（有一些有默认值）
 		AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
 				.loadMetadata(this.beanClassLoader);
+		//获取注解属性
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
+		//获取自动配置类
 		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
-		configurations = removeDuplicates(configurations);
-		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
+		configurations = removeDuplicates(configurations); //移除重复的
+		Set<String> exclusions = getExclusions(annotationMetadata, attributes); //获取需要排除的
 		checkExcludedClasses(configurations, exclusions);
-		configurations.removeAll(exclusions);
+		configurations.removeAll(exclusions); //删除排除的
 		configurations = filter(configurations, autoConfigurationMetadata);
-		fireAutoConfigurationImportEvents(configurations, exclusions);
+		fireAutoConfigurationImportEvents(configurations, exclusions); //发布自动配置事件
 		return StringUtils.toStringArray(configurations);
 	}
 
@@ -219,9 +210,10 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 		String[] candidates = StringUtils.toStringArray(configurations);
 		boolean[] skip = new boolean[candidates.length];
 		boolean skipped = false;
+		//获取需过滤的自动配置拦截器   OnClassCondition
 		for (AutoConfigurationImportFilter filter : getAutoConfigurationImportFilters()) {
 			invokeAwareMethods(filter);
-			boolean[] match = filter.match(candidates, autoConfigurationMetadata);
+			boolean[] match = filter.match(candidates, autoConfigurationMetadata);  //是否满足自动配置的条件  match = false 表示不满足
 			for (int i = 0; i < match.length; i++) {
 				if (!match[i]) {
 					skip[i] = true;
@@ -229,12 +221,12 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 				}
 			}
 		}
-		if (!skipped) {
+		if (!skipped) {  //有一个不满足 skipped = ture  skipped = false 表示所有的都满足则直接返回
 			return configurations;
 		}
 		List<String> result = new ArrayList<>(candidates.length);
 		for (int i = 0; i < candidates.length; i++) {
-			if (!skip[i]) {
+			if (!skip[i]) {  //将匹配的放在result里面并返回
 				result.add(candidates[i]);
 			}
 		}
