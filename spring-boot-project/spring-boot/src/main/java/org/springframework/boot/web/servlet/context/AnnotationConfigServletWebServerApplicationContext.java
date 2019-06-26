@@ -193,9 +193,9 @@ public class AnnotationConfigServletWebServerApplicationContext extends ServletW
 
 	@Override
 	protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
-		super.postProcessBeanFactory(beanFactory);
+		super.postProcessBeanFactory(beanFactory); //给beanFacotry添加BeanPostProcessor(WebApplicationContextServletContextAwareProcessor)
 		if (this.basePackages != null && this.basePackages.length > 0) {
-			this.scanner.scan(this.basePackages);
+			this.scanner.scan(this.basePackages); //扫描基础包
 		}
 		if (!this.annotatedClasses.isEmpty()) {
 			this.reader.register(ClassUtils.toClassArray(this.annotatedClasses));

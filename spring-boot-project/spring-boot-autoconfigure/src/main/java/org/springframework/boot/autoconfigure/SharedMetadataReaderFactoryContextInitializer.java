@@ -77,17 +77,18 @@ class SharedMetadataReaderFactoryContextInitializer
 
 		@Override
 		public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-			register(registry);
+			register(registry); //注册SharedMetadataReaderFactoryBean类型的bean
 			configureConfigurationClassPostProcessor(registry);
 		}
 
 		private void register(BeanDefinitionRegistry registry) {
 			RootBeanDefinition definition = new RootBeanDefinition(SharedMetadataReaderFactoryBean.class);
-			registry.registerBeanDefinition(BEAN_NAME, definition);
+			registry.registerBeanDefinition(BEAN_NAME, definition);  //beanName = internalCachingMetadataReaderFactory
 		}
 
 		private void configureConfigurationClassPostProcessor(BeanDefinitionRegistry registry) {
 			try {
+				//org.springframework.context.annotation.ConfigurationClassPostProcessor
 				BeanDefinition definition = registry
 						.getBeanDefinition(AnnotationConfigUtils.CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME);
 				definition.getPropertyValues().add("metadataReaderFactory", new RuntimeBeanReference(BEAN_NAME));

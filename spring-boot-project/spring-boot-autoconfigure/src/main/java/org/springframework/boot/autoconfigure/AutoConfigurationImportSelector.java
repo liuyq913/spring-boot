@@ -355,7 +355,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 		public void process(AnnotationMetadata annotationMetadata, DeferredImportSelector deferredImportSelector) {
 			String[] imports = deferredImportSelector.selectImports(annotationMetadata);
 			for (String importClassName : imports) {
-				this.entries.put(importClassName, annotationMetadata);
+				this.entries.put(importClassName, annotationMetadata);//获取到需要自动配置bean放在entries里面
 			}
 		}
 
@@ -372,9 +372,9 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 				return autoConfigurations;
 			}
 			AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader
-					.loadMetadata(this.beanClassLoader);
+					.loadMetadata(this.beanClassLoader); //获取到目前支持的自动配置类集合
 			return new AutoConfigurationSorter(getMetadataReaderFactory(), autoConfigurationMetadata)
-					.getInPriorityOrder(autoConfigurations);
+					.getInPriorityOrder(autoConfigurations); //
 		}
 
 		private MetadataReaderFactory getMetadataReaderFactory() {
